@@ -1,0 +1,49 @@
+{% extends "flask_user_layout.html" %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+  <li class="breadcrumb-item active">All Meals</li>
+{% endblock %}
+
+
+{% block page_content %}
+
+<main class="margin-set">
+  <div class="m-bottom">
+    <h2 class="m-bottom">All Meals</h2>
+    <a href="{{ url_for('addmeal') }}"><button>Add New Meal</button></a>
+  </div>
+  
+  {% for meal in meals %}
+  <div class="card m-bottom" 
+  style="border: grey 1px solid; padding: 15px;">
+  
+  <h3 class="card-title">{{ meal['title'] }}</h3>
+  <div class="card-body">
+    <h6 class="">{{ meal['restaurant'] }}</h6>
+    <hr style="width: 50%; margin-bottom: 10px;">
+    <p class="card-text">{{ meal['description'] }}</p>
+    <div class="ratings">
+      {% if meal['tryAgain'] == 'No' %}
+      <img src="{{url_for('static', filename='images/FrownFace.png')}}" class="ratingIcon" alt="Frown Face Icon"/>
+      {% elif meal['tryAgain'] == 'Maybe' %}
+      <img src="{{url_for('static', filename='images/MehFace.png')}}" class="ratingIcon" alt="Meh Face Icon"/>
+      {% elif meal['tryAgain'] == 'Yes' %}
+      <img src="{{url_for('static', filename='images/HappyFace.png')}}" class="ratingIcon" alt="Happy Face Icon"/>
+      {% endif %}
+      {% for i in range(0, meal['starRating']) %}
+        <img src="{{url_for('static', filename='images/starIcon.png')}}" class="starRatingIcon" alt="Star Rating Icon"/>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endfor%}
+</main>
+
+
+<!-- {% if meal|length == 0 %}
+  <h2>Your list is empty! Add a new meal!</h2>
+  {% endif %} -->
+  
+  {% endblock %}
+  

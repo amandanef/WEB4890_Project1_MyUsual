@@ -1,0 +1,20 @@
+{% extends "flask_user_layout.html" %}
+
+{% block title %}My Usual{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Home</li>
+{% endblock %}
+
+
+{% block page_content %}
+
+
+<div><h1>Welcome to My Usual</h1></div>
+<p>(Administrator username and password is admin@example.com, Password1</p>
+
+<a href="{{ url_for('all_meals') }}"><button>View All Meals</button></a>
+<a href="{{ url_for('addmeal') }}"><button>Add New Meal</button></a>
+
+
+{% endblock %}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Usual</title>
+
+    <!-- Bootstrap -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <!-- USE OF ICONS -->
+    <!-- <a href='https://www.freepik.com/vectors/love'>Love vector created by rawpixel.com - www.freepik.com</a> -->
+</head>
+<body>
+    
+    {% block navbar %}
+    <nav class="navbar" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="navbar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">My Usual</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('all_meals') }}">All Meals</a></li>
+                    <li><a href="{{ url_for('addmeal') }}">New Meal</a></li>
+                    {% if call_or_get(current_user.is_authenticated) and isAdmin(current_user.email) %}
+                    <li><a href="{{ url_for('admin_page') }}">Advanced Settings</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="nav navbar-nav" style="float:right">
+                    {% if call_or_get(current_user.is_authenticated) %}
+                    <li><a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a></li>
+                    &nbsp; | &nbsp;
+                    <li><a href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+        
+    {% block body %}
+
+    <hr class="no-margins"/>
+    <div id="main-div" class="margin-set">
+    {# One-time system messages called Flash messages #}
+    {% block flash_messages %}
+        {%- with messages = get_flashed_messages(with_categories=true) -%}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category=='error' %}
+                        {% set category='danger' %}
+                    {% endif %}
+                    <div class="alert alert-{{category}}">{{ message|safe }}</div>
+                {% endfor %}
+            {% endif %}
+        {%- endwith %}
+    {% endblock %}
+
+    {% block main %}
+        {% block content %}
+            {% block page_content %}
+
+            {% endblock %}
+        {% endblock %}
+    {% endblock %}
+    </div>
+
+    <br/>
+    <hr class="no-margins"/>
+    <div id="footer-div" class="clearfix margin-set m-top m-bottom">
+        <div class="pull-left">My Usual - The Meal Application</div>
+        <div class="pull-right">&copy; Amanda Nef</div>
+    </div>
+    {% endblock %}
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+    {# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
+    {% block extra_js %}{% endblock %}
+
+  </body>
+</html>

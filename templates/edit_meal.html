@@ -1,28 +1,23 @@
 {% extends "flask_user_layout.html" %}
 
-
 {% block page_content %}
-
-{% if meal_title != '' %}
-  <h3>The meal named "{{meal_title}}" has been added to the data base!</h3>
-{% else %}
-  <form method="post" style="width: 80%; margin: auto;">
-    <h2 style="margin-bottom: 20px;">New Meal</h2>
+<form method="post" style="width: 80%; margin: auto;">
+    <h2 style="margin-bottom: 20px;">Edit Meal {{ request.form.title }}</h2>
     <div class="form-group">
       <label >Meal Title</label>
-      <input  type="text" class="form-control"  name="title" required placeholder="E.g. Pad Thai, Ramen, Pizza, etc...">
+      <input  type="text" class="form-control"  name="title" required value="{{ request.form.title }}" placeholder="{{ request.form.title }}">
     </div>
     <div class="form-group">
       <label >Restaurant</label>
-      <input type="text" class="form-control" name="restaurant" required placeholder="E.g. Panda Express, Tony's Pizza, etc...">
+      <input type="text" class="form-control" name="restaurant" required value="{{ request.form.restaurant }}">
     </div>
     <div class="form-group">
       <label >Tags</label>
-      <textarea class="form-control" name="tags" placeholder="E.g. Pricy, Thumbs Up, , Spicy, etc..." ></textarea>
+      <textarea class="form-control" name="tags" value="{{ request.form.tags }}"></textarea>
     </div>
     <div class="form-group">
       <label >Description</label>
-      <textarea class="form-control" name="description" required  placeholder="What would you like to say about this meal?" ></textarea>
+      <textarea class="form-control" name="description" required  value="{{ request.form.description }}"></textarea>
     </div>
     <div class="form-group">
       <label>Star Rating</label>
@@ -46,11 +41,7 @@
         <label for="tryAgain_no">No thanks!</label>
     </div>
     <div>
-      <a href="{{ url_for('all_meals') }}"><input type="submit" class="submit"></a>
+      <input type="submit" class="submit">
     </div>
   </form>
-{% endif %}
-
-
-
 {% endblock %}

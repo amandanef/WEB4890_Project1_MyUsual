@@ -49,6 +49,9 @@ button, .submit {
     color: white;
     padding: 10px;
 }
+.edit {
+  padding: 5px;
+}
 
 
 /* Star Ratings */

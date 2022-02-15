@@ -11,7 +11,9 @@
 <main class="margin-set">
   <div class="m-bottom">
     <h2 class="m-bottom">All Meals</h2>
+    {% if call_or_get(current_user.is_authenticated) and isAdmin(current_user.email) %}
     <a href="{{ url_for('addmeal') }}"><button>Add New Meal</button></a>
+    {% endif %}
   </div>
   
   {% for meal in meals %}

@@ -1,14 +1,9 @@
-# This file contains an example Flask-User application.
-# To keep the example simple, we are applying some unusual techniques:
-# - Placing everything in one file
-# - Using class-based configuration (instead of file-based configuration)
-# - Using string-based templates (instead of file-based templates)
 
 import datetime
 from flask import Flask, request, render_template
 from flask_babelex import Babel
 from flask_sqlalchemy import SQLAlchemy
-from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
+from flask_user import login_required, roles_required, UserManager, UserMixin
 
 # Class-based application configuration
 class ConfigClass(object):
@@ -45,10 +40,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(__name__+'.ConfigClass')
 
-    # Initialize Flask-BabelEx
+    # Initialize
     babel = Babel(app)
-
-    # Initialize Flask-SQLAlchemy
     db = SQLAlchemy(app)
 
     # Define the User data-model.
@@ -123,10 +116,6 @@ def create_app():
         starRating = db.Column(db.Integer())
 
 
-
-
-
-    # The Home page is accessible to anyone
     @app.route('/')
     def home_page():
         return render_template("index.html")
@@ -137,32 +126,6 @@ def create_app():
     def admin_page():
         return render_template('admin.html')
 
-    # Seeds the Database (admins only)
-    @app.route('/seedDB')
-   # @roles_required('Admin')
-    def seedDB():
-        db.drop_all()
-        db.create_all()
-        tonkatsu = Meals(title='Tonkatsu Ramen', restaurant="Nikko's", description="This dish was a perfect bowl of ramen. The pork was cooked perfectly and the broth was good too.", tags="affordable, leftovers, Japanese", tryAgain="Yes", starRating="5")
-        pasta = Meals(title='Seafood Pasta', restaurant="Olive Garden", description="The meal was good but there wasn't as much seafood as I was hoping for. Would feel like more value for the price if they added some more in.", tags="pricey, small portion size, Italian", tryAgain="Maybe", starRating="3")
-        cupBop = Meals(title='Rock Bop', restaurant="Cup Bop", description="This dish was way too spicy for my taste! I could barely task any of the food because my mouth burned.", tags="Korean, spicy, noodles", tryAgain="No", starRating="1")
-   
-        db.session.add(tonkatsu)
-        db.session.add(pasta)
-        db.session.add(cupBop)
-       
-        db.session.commit()
-          
-
-        return '<h1>DB Seeded!</h1>'
-    # Erase the Database (admins only)
-    @app.route('/erase_DB')
-    @roles_required('Admin')
-    def eraseDB():
-        meals = Meals.query.all()
-        db.session.delete(meals)
-        db.session.commit()
-        return '<h1>DB Erased!</h1>'
     # View All Books
     @app.route('/all_meals')
     @login_required
@@ -197,24 +160,11 @@ def create_app():
 
                    # search = Meals.query.filter(Meals.author =='?')
                     newMeal = Meals(title=title, restaurant=restaurant, description=description, tags=tags, tryAgain=tryAgain, starRating=starRating)
-    
-                    #CHANGE THIS TO BE TITLE AND RESTAURANT EQUIVELENAT
-                    # if len(search) > 0:
-                    #     return '<h2>That meal title already exists, please select another.</h2>'
-                    # else:
-                    #     newMeal = Meals(title=title, author=author, description=description)
-                    #     db.session.add(newMeal)
-                    #     db.session.commit()
-
-                    #     return render_template('add_meal.html', meal_title = title)
                     
                     db.session.add(newMeal)
                     db.session.commit()
 
             return render_template('add_meal.html', meal_title = "")
-
-
-
 
     return app
 
